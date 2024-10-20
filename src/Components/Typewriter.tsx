@@ -5,21 +5,22 @@ export interface TypewriterProps {
   string: string;
   className?: string;
   cursor?: string;
+  delay?: number;
 }
 
 export function Typewriter({
   string,
   className,
   cursor = "_",
+  delay = 300,
 }: TypewriterProps) {
   const [text, setText] = useState("");
   const [pointer, setPointer] = useState(-1);
   const [reverse, setReverse] = useState(false);
-  const delay = 300;
 
   const cursorStyles = css({
     fontWeight: 800,
-    fontSize: "30px",
+    fontSize: "50px",
     color: "cadetGray",
   });
 
