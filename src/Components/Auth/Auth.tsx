@@ -1,6 +1,8 @@
 import { css } from "../../../styled-system/css";
 import { Typewriter } from "../Typewriter.tsx";
 import supabase from "../../supabase.ts";
+import { useAuth } from "../../state/auth.ts";
+import { useEffect } from "react";
 
 function Auth() {
   const styles = css({
@@ -52,6 +54,12 @@ function Auth() {
       provider: "google",
     });
   };
+
+  const { session } = useAuth();
+
+  useEffect(() => {
+    console.log("session from authhh", session);
+  }, [session]);
 
   return (
     <div className={styles}>

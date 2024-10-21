@@ -2,9 +2,9 @@ import { css } from "../styled-system/css";
 import Home from "./Components/Home/Home.tsx";
 import { Route, Switch } from "wouter";
 import Auth from "./Components/Auth/Auth.tsx";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import supabase from "./supabase.ts";
-import { Session } from "@supabase/supabase-js";
+import { useAuth } from "./state/auth.ts";
 
 // background: `url("/background.png")`,
 //     backgroundSize: "cover",
@@ -21,7 +21,7 @@ function App() {
     fontFamily: "IBM Plex Mono, monospace",
   });
 
-  const [session, setSession] = useState<Session | null>(null);
+  const { setSession } = useAuth();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -36,10 +36,6 @@ function App() {
 
     return () => subscription.unsubscribe();
   }, []);
-
-  useEffect(() => {
-    console.log("userre sesssion", session);
-  }, [session]);
 
   return (
     <div className={styles}>
