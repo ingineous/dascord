@@ -1,5 +1,6 @@
 import { css } from "../../../styled-system/css";
 import { Typewriter } from "../Typewriter.tsx";
+import supabase from "../../supabase.ts";
 
 function Auth() {
   const styles = css({
@@ -46,15 +47,23 @@ function Auth() {
     },
   });
 
+  const signIn = () => {
+    supabase.auth.signInWithOAuth({
+      provider: "google",
+    });
+  };
+
   return (
     <div className={styles}>
       <Typewriter
         className={typewriterStyles}
         string={"sign in with google."}
-        delay={250}
+        delay={300}
       />
 
-      <span className={buttonStyles}>{"----->>>"}</span>
+      <button className={buttonStyles} onClick={signIn}>
+        {"----->>>"}
+      </button>
     </div>
   );
 }
