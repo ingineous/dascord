@@ -3,6 +3,8 @@ import { Typewriter } from "../Typewriter.tsx";
 import supabase from "../../supabase.ts";
 import { useAuth } from "../../state/auth.ts";
 import { useEffect } from "react";
+import { useLocation } from "wouter";
+import routes from "../../config/routes.ts";
 
 function Auth() {
   const styles = css({
@@ -55,13 +57,16 @@ function Auth() {
     });
   };
 
-  const { session } = useAuth();
+  const { session, loading } = useAuth();
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_location, setLocation] = useLocation();
 
   useEffect(() => {
-    console.log("session from authhh", session);
-  }, [session]);
+    if (!loading && session) setLocation(routes.home);
+  }, [session, loading]);
 
-  return (
+  return !session ? (
     <div className={styles}>
       <Typewriter
         className={typewriterStyles}
@@ -73,6 +78,8 @@ function Auth() {
         {"----->>>"}
       </button>
     </div>
+  ) : (
+    ""
   );
 }
 

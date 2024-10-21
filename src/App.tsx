@@ -5,6 +5,8 @@ import Auth from "./Components/Auth/Auth.tsx";
 import { useEffect } from "react";
 import supabase from "./supabase.ts";
 import { useAuth } from "./state/auth.ts";
+import routes from "./config/routes.ts";
+import ChatPage from "./Components/ChatPage/ChatPage.tsx";
 
 // background: `url("/background.png")`,
 //     backgroundSize: "cover",
@@ -21,12 +23,27 @@ function App() {
     fontFamily: "IBM Plex Mono, monospace",
   });
 
-  const { setSession } = useAuth();
+  const { session, loading, setSession, setLoading, setError } = useAuth();
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
+    const getSession = async () => {
+      await setLoading(true);
+
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        setSession(session);
+      } catch (error) {
+        console.error(error);
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getSession();
 
     const {
       data: { subscription },
@@ -37,11 +54,16 @@ function App() {
     return () => subscription.unsubscribe();
   }, []);
 
+  useEffect(() => {
+    console.log("sesssisosnsnsn change", session, loading);
+  }, [session]);
+
   return (
     <div className={styles}>
       <Switch>
-        <Route path="/" component={Home} />
-        <Route path="/auth" component={Auth} />
+        <Route path={routes.home} component={Home} />
+        <Route path={routes.auth} component={Auth} />
+        <Route path={routes.chat} component={ChatPage} />
       </Switch>
     </div>
   );

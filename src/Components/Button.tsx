@@ -1,6 +1,12 @@
 import { css } from "../../styled-system/css";
 
-function Button({ text = "get started." }: { text?: string | undefined }) {
+function Button({
+  text = "get started.",
+  onClick,
+}: {
+  text?: string | undefined;
+  onClick?: () => void;
+}) {
   const styles = css({
     backgroundColor: "roseTaupe",
     padding: "10px 30px",
@@ -13,7 +19,11 @@ function Button({ text = "get started." }: { text?: string | undefined }) {
     },
     maxWidth: "180px",
   });
-  return <button className={styles}>{text}</button>;
+  return (
+    <button className={styles} onClick={onClick}>
+      {text}
+    </button>
+  );
 }
 
 export default Button;

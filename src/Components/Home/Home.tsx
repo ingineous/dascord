@@ -1,6 +1,7 @@
 import { css } from "../../../styled-system/css";
 import Button from "../Button.tsx";
 import { Link } from "wouter";
+import supabase from "../../supabase.ts";
 
 function Home() {
   const styles = css({
@@ -53,10 +54,15 @@ function Home() {
     textDecoration: "underline",
   });
 
+  const signOut = () => {
+    console.log("logging out");
+    supabase.auth.signOut();
+  };
+
   const Navbar = () => (
     <div className={navbarStyles}>
       <p className={dascord}>Dascord.</p>
-      <Button text={"log in."} />
+      <Button text={"log out."} onClick={signOut} />
     </div>
   );
 
