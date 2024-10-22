@@ -11,6 +11,7 @@ const colors = {
   roseTaupe: { value: "#785964" },
   onyx: { value: "#393B3B" },
   rosePompadour: { value: "#EE7897" },
+  darkEerie: { value: "#1a1c1c" },
 };
 
 export default defineConfig({

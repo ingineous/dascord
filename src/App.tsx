@@ -8,12 +8,6 @@ import { useAuth } from "./state/auth.ts";
 import routes from "./config/routes.ts";
 import ChatPage from "./Components/ChatPage/ChatPage.tsx";
 
-// background: `url("/background.png")`,
-//     backgroundSize: "cover",
-//     backgroundRepeat: "no-repeat",
-//     backgroundColor: "rgba(0, 0, 0, 0.85)",
-//     backgroundBlendMode: "overlay",
-
 function App() {
   const styles = css({
     height: "100vh",
