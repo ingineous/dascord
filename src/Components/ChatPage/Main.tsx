@@ -28,7 +28,10 @@ function Main() {
 
   const mainStyles = css({
     display: "flex",
+    flexDirection: "column",
     padding: "5px 20px",
+    height: "100%",
+    justifyContent: "space-between",
   });
 
   const nameStyles = css({
@@ -85,6 +88,7 @@ function Main() {
       <hr className={barStyles} />
 
       <div className={mainStyles}>
+        hi
         <Tiptap />
       </div>
     </div>

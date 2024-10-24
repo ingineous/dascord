@@ -38,6 +38,7 @@ function ChatPage() {
             }
           />
         </div>
+
         <Main />
       </div>
     </Protected>

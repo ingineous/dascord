@@ -2,34 +2,59 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Highlight from "@tiptap/extension-highlight";
 import Typography from "@tiptap/extension-typography";
+import Placeholder from "@tiptap/extension-placeholder";
+import { css } from "../../styled-system/css";
+import { IoMdAttach } from "react-icons/io";
 
-const content =
-  " <p>\n" +
-  "      Markdown shortcuts make it easy to format the text while typing.\n" +
-  "    </p>\n" +
-  "    <p>\n" +
-  "      To test that, start a new line and type <code>#</code> followed by a space to get a heading. Try <code>#</code>, <code>##</code>, <code>###</code>, <code>####</code>, <code>#####</code>, <code>######</code> for different levels.\n" +
-  "    </p>\n" +
-  "    <p>\n" +
-  "      Those conventions are called input rules in Tiptap. Some of them are enabled by default. Try <code>></code> for blockquotes, <code>*</code>, <code>-</code> or <code>+</code> for bullet lists, or <code>\\`foobar\\`</code> to highlight code, <code>~~tildes~~</code> to strike text, or <code>==equal signs==</code> to highlight text.\n" +
-  "    </p>\n" +
-  "    <p>\n" +
-  "      You can overwrite existing input rules or add your own to nodes, marks and extensions.\n" +
-  "    </p>\n" +
-  "    <p>\n" +
-  "      For example, we added the <code>Typography</code> extension here. Try typing <code>(c)</code> to see how it’s converted to a proper © character. You can also try <code>-></code>, <code>>></code>, <code>1/2</code>, <code>!=</code>, or <code>--</code>.\n" +
-  "    </p>";
+const content = ``;
 
 const Tiptap = () => {
   const editor = useEditor({
-    extensions: [StarterKit, Highlight, Typography],
+    extensions: [
+      StarterKit,
+      Highlight,
+      Typography,
+      Placeholder.configure({
+        placeholder: "enter to send.",
+      }),
+    ],
     content,
   });
 
+  const containerStyles = css({
+    display: "flex",
+    justifyContent: "space-between",
+    width: "100%",
+    fontSize: "16px",
+    backgroundColor: "darkEerie",
+    padding: "20px",
+    borderRadius: "15px",
+    alignItems: "center",
+  });
+
+  const editorStyles = css({
+    width: "100%",
+    marginLeft: "10px",
+  });
+
+  const iconStyles = css({
+    fontSize: "32px",
+    cursor: "pointer",
+    padding: "5px",
+    transition: "background 0.1s linear",
+    borderRadius: "5px",
+
+    _hover: {
+      background: "rgba(255, 255, 255, 0.1)",
+    },
+  });
+
   return (
-    <>
-      <EditorContent editor={editor} />
-    </>
+    <div className={containerStyles}>
+      <IoMdAttach className={iconStyles} />
+
+      <EditorContent className={editorStyles} editor={editor} />
+    </div>
   );
 };
 
