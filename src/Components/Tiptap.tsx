@@ -49,11 +49,30 @@ const Tiptap = () => {
     },
   });
 
+  const onEnter = (event: {
+    key: string;
+    preventDefault: () => void;
+    ctrlKey: boolean;
+  }) => {
+    if (event.key === "Enter" && !event.ctrlKey) {
+      event.preventDefault();
+      const content = editor?.getHTML();
+
+      editor?.commands.clearContent();
+
+      console.log("enterrrrrrr", content);
+    }
+  };
+
   return (
     <div className={containerStyles}>
       <IoMdAttach className={iconStyles} />
 
-      <EditorContent className={editorStyles} editor={editor} />
+      <EditorContent
+        className={editorStyles}
+        editor={editor}
+        onKeyDown={onEnter}
+      />
     </div>
   );
 };
