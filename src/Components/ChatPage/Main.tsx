@@ -2,7 +2,7 @@ import { css } from "../../../styled-system/css";
 import { IoHomeOutline } from "react-icons/io5";
 import { LiaUserFriendsSolid } from "react-icons/lia";
 import Search from "./Search.tsx";
-import Tiptap from "../Tiptap.tsx";
+import Editor from "./Editor.tsx";
 import Message from "./Message.tsx";
 
 function Main() {
@@ -70,7 +70,8 @@ function Main() {
 
   const editorContainer = css({
     padding: "5px 10px",
-    bottom: "10px",
+    position: "relative",
+    bottom: "-5px",
   });
 
   const messagesContainer = css({
@@ -100,9 +101,9 @@ function Main() {
 
       <div className={mainStyles}>
         <div className={messagesContainer}>
-          <Message message={"whore"} />
-          <Message message={"whore"} />
-          <Message message={"whore"} />
+          <Message message={"diddy"} />
+          <Message message={"typhlosion"} />
+          <Message message={"drake"} />
           <Message />
           <Message />
           <Message />
@@ -135,7 +136,7 @@ function Main() {
         </div>
 
         <div className={editorContainer}>
-          <Tiptap />
+          <Editor />
         </div>
       </div>
     </div>

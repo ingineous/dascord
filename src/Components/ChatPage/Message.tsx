@@ -13,10 +13,9 @@ function Message({ message }: { message?: string }) {
 
   const containerStyles = css({
     display: "flex",
-    justifyContent: "space-between",
     width: "100%",
     fontSize: "16px",
-    alignItems: "center",
+    alignItems: "flex-start",
     padding: "10px 40px",
 
     transition: "background 0.1s linear",
@@ -26,13 +25,32 @@ function Message({ message }: { message?: string }) {
     },
   });
 
+  const profileStyles = css({
+    width: "30px",
+    marginRight: "30px",
+  });
+
   const editorStyles = css({
     width: "100%",
   });
 
+  const nameStyles = css({
+    fontWeight: "900",
+    marginBottom: "10px",
+  });
+
+  const nameContainer = css({
+    position: "relative",
+    top: "-7px",
+  });
+
   return (
     <div className={containerStyles}>
-      <EditorContent className={editorStyles} editor={editor} />
+      <img className={profileStyles} src="/ayase.webp" alt="profile" />
+      <div className={nameContainer}>
+        <p className={nameStyles}>momo:</p>
+        <EditorContent className={editorStyles} editor={editor} />
+      </div>
     </div>
   );
 }

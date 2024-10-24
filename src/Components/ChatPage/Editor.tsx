@@ -3,12 +3,14 @@ import StarterKit from "@tiptap/starter-kit";
 import Highlight from "@tiptap/extension-highlight";
 import Typography from "@tiptap/extension-typography";
 import Placeholder from "@tiptap/extension-placeholder";
-import { css } from "../../styled-system/css";
+import { css } from "../../../styled-system/css";
 import { IoMdAttach } from "react-icons/io";
+import { useEffect, useState } from "react";
+import Files from "./Files.tsx";
 
 const content = ``;
 
-const Tiptap = () => {
+const Editor = () => {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -21,15 +23,14 @@ const Tiptap = () => {
     content,
   });
 
+  const [files, setFiles] = useState<Array<File>>([]);
+
   const containerStyles = css({
-    display: "flex",
-    justifyContent: "space-between",
     width: "100%",
     fontSize: "16px",
     backgroundColor: "darkEerie",
     padding: "20px",
     borderRadius: "15px",
-    alignItems: "center",
   });
 
   const editorStyles = css({
@@ -64,17 +65,46 @@ const Tiptap = () => {
     }
   };
 
+  const upload = () => {
+    document.getElementById("uploader")?.click();
+  };
+
+  useEffect(() => {
+    console.log("filsessesss", files);
+  }, [files]);
+
+  const textEditorContainer = css({
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  });
+
   return (
     <div className={containerStyles}>
-      <IoMdAttach className={iconStyles} />
+      <div className={textEditorContainer}>
+        <IoMdAttach className={iconStyles} onClick={upload} />
 
-      <EditorContent
-        className={editorStyles}
-        editor={editor}
-        onKeyDown={onEnter}
-      />
+        <input
+          type="file"
+          id={"uploader"}
+          style={{ display: "none" }}
+          multiple={true}
+          onChange={(event) => {
+            if (event.target.files) {
+              setFiles([...files, ...event.target.files]);
+            }
+          }}
+        />
+
+        <EditorContent
+          className={editorStyles}
+          editor={editor}
+          onKeyDown={onEnter}
+        />
+      </div>
+      <Files files={files} setFiles={setFiles} />
     </div>
   );
 };
 
-export default Tiptap;
+export default Editor;
