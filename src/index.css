@@ -3,8 +3,8 @@
 
 @layer reset, base, tokens, recipes, utilities;
 
-.ProseMirror p:last-child br {
-    display: none;
+.message .ProseMirror p:last-child br {
+    display: none !important;
 }
 
 .ProseMirror p.is-editor-empty:first-child::before {
@@ -114,5 +114,14 @@
         border: none;
         border-top: 1px solid white;
         margin: 2rem 0;
+    }
+
+    a {
+        color: #785964;
+        cursor: pointer;
+
+        &:hover {
+            color: #ee7897;
+        }
     }
 }

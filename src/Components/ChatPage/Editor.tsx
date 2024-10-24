@@ -7,6 +7,7 @@ import { css } from "../../../styled-system/css";
 import { IoMdAttach } from "react-icons/io";
 import { useEffect, useState } from "react";
 import Files from "./Files.tsx";
+import Link from "@tiptap/extension-link";
 
 const content = ``;
 
@@ -16,6 +17,11 @@ const Editor = () => {
       StarterKit,
       Highlight,
       Typography,
+      Link.configure({
+        autolink: true,
+        openOnClick: true,
+        linkOnPaste: true,
+      }),
       Placeholder.configure({
         placeholder: "enter to send.",
       }),

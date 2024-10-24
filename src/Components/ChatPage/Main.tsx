@@ -104,7 +104,11 @@ function Main() {
           <Message message={"diddy"} />
           <Message message={"typhlosion"} />
           <Message message={"drake"} />
-          <Message />
+          <Message
+            message={
+              '<p><a target="_blank" rel="noopener noreferrer nofollow" href="http://google.com">google.com</a> </p><p></p>'
+            }
+          />
           <Message />
           <Message />
           <Message />

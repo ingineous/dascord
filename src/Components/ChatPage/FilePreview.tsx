@@ -45,7 +45,6 @@ function FilePreview({
     display: "flex",
     justifyContent: "flex-end",
     height: "100%",
-    width: "fit-content",
   });
 
   useEffect(() => {
@@ -91,7 +90,11 @@ function FilePreview({
           <p>{truncate(fileSize.quantity.toString(), 4, "") + fileSize.unit}</p>
         </div>
       )}
-      <div className={closeContainer} onClick={() => removeFile(index)}>
+      <div
+        className={closeContainer}
+        onClick={() => removeFile(index)}
+        style={{ width: isImage ? "100%" : "fit-content" }}
+      >
         <AiOutlineClose className={closeStyles} />
       </div>
     </div>

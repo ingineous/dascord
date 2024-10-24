@@ -44,9 +44,7 @@ function ChatPage() {
               initial
               avatar={"/ayase.webp"}
               username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
+              text={"the ones who die a idk"}
             />{" "}
             <Chat
               initial

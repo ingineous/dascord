@@ -16,7 +16,7 @@ function Chat({
     padding: "5px",
     display: "flex",
     cursor: "pointer",
-    alignItems: "center",
+    alignItems: "flex-start",
 
     transition: "background 0.1s linear",
 

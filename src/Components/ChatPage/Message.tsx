@@ -3,10 +3,20 @@ import StarterKit from "@tiptap/starter-kit";
 import Highlight from "@tiptap/extension-highlight";
 import Typography from "@tiptap/extension-typography";
 import { css } from "../../../styled-system/css";
+import Link from "@tiptap/extension-link";
 
 function Message({ message }: { message?: string }) {
   const editor = useEditor({
-    extensions: [StarterKit, Highlight, Typography],
+    extensions: [
+      StarterKit,
+      Highlight,
+      Typography,
+      Link.configure({
+        autolink: true,
+        openOnClick: true,
+        linkOnPaste: true,
+      }),
+    ],
     content: message ? message : `<p><strong>idk</strong> man</p><p></p>`,
     editable: false,
   });
@@ -49,7 +59,7 @@ function Message({ message }: { message?: string }) {
       <img className={profileStyles} src="/ayase.webp" alt="profile" />
       <div className={nameContainer}>
         <p className={nameStyles}>momo:</p>
-        <EditorContent className={editorStyles} editor={editor} />
+        <EditorContent className={editorStyles + " message"} editor={editor} />
       </div>
     </div>
   );
