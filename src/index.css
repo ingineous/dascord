@@ -3,7 +3,8 @@
 
 @layer reset, base, tokens, recipes, utilities;
 
-.ProseMirror-trailingBreak {
+.ProseMirror p:last-child br {
+    display: none;
 }
 
 .ProseMirror p.is-editor-empty:first-child::before {
