@@ -18,8 +18,8 @@ function Profile({
 
   const styles = css({
     display: "flex",
-    padding: "5px",
-    height: "65px",
+    padding: "7px",
+    height: "7vh",
     alignItems: "center",
     justifyContent: "space-between",
   });

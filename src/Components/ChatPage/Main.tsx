@@ -3,6 +3,7 @@ import { IoHomeOutline } from "react-icons/io5";
 import { LiaUserFriendsSolid } from "react-icons/lia";
 import Search from "./Search.tsx";
 import Tiptap from "../Tiptap.tsx";
+import Message from "./Message.tsx";
 
 function Main() {
   const styles = css({
@@ -13,8 +14,8 @@ function Main() {
 
   const topbarStyles = css({
     display: "flex",
-    height: "65px",
-    padding: "5px 20px",
+    height: "7%",
+    padding: "5px 40px",
     position: "relative",
     top: "-5px",
     alignItems: "center",
@@ -29,8 +30,7 @@ function Main() {
   const mainStyles = css({
     display: "flex",
     flexDirection: "column",
-    padding: "5px 20px",
-    height: "100%",
+    height: "90%",
     justifyContent: "space-between",
   });
 
@@ -68,6 +68,17 @@ function Main() {
     display: "flex",
   });
 
+  const editorContainer = css({
+    padding: "5px 10px",
+    bottom: "10px",
+  });
+
+  const messagesContainer = css({
+    display: "flex",
+    flexDirection: "column-reverse",
+    overflowY: "auto",
+  });
+
   return (
     <div className={styles}>
       <div className={topbarStyles}>
@@ -88,8 +99,44 @@ function Main() {
       <hr className={barStyles} />
 
       <div className={mainStyles}>
-        hi
-        <Tiptap />
+        <div className={messagesContainer}>
+          <Message message={"whore"} />
+          <Message message={"whore"} />
+          <Message message={"whore"} />
+          <Message />
+          <Message />
+          <Message />
+          <Message />
+          <Message />
+          <Message />
+          <Message />
+          <Message />
+          <Message />
+          <Message />
+          <Message />
+          <Message />
+          <Message />
+          <Message />
+          <Message />
+          <Message />
+          <Message />
+          <Message />
+          <Message />
+          <Message />
+          <Message />
+          <Message />
+          <Message />
+          <Message />
+          <Message />
+          <Message />
+          <Message />
+          <Message />
+          <Message />
+        </div>
+
+        <div className={editorContainer}>
+          <Tiptap />
+        </div>
       </div>
     </div>
   );

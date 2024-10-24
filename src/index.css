@@ -3,8 +3,7 @@
 
 @layer reset, base, tokens, recipes, utilities;
 
-
-.emoji-kill {
+.ProseMirror-trailingBreak {
     display: none;
 }
 
