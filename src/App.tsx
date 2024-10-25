@@ -7,7 +7,8 @@ import supabase from "./supabase.ts";
 import { useAuth } from "./state/auth.ts";
 import routes from "./config/routes.ts";
 import ChatPage from "./Components/ChatPage/ChatPage.tsx";
-import Explore from "./Explore.tsx";
+import Explore from "./Components/Explore.tsx";
+import Friends from "./Components/Friends/Friends.tsx";
 
 function App() {
   const styles = css({
@@ -60,6 +61,7 @@ function App() {
         <Route path={routes.auth} component={Auth} />
         <Route path={routes.chat} component={ChatPage} />
         <Route path={routes.explore} component={Explore} />
+        <Route path={routes.friends} component={Friends} />
       </Switch>
     </div>
   );

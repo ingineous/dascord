@@ -96,7 +96,10 @@ function Main() {
           <Link href={routes.explore}>
             <SlCompass className={iconStyles} />
           </Link>
-          <LiaUserFriendsSolid className={iconStyles} />
+
+          <Link href={routes.friends}>
+            <LiaUserFriendsSolid className={iconStyles} />
+          </Link>
 
           <Search />
         </div>

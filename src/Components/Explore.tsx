@@ -1,7 +1,7 @@
-import Protected from "./Components/Protected/Protected.tsx";
-import { css } from "../styled-system/css";
+import Protected from "./Protected/Protected.tsx";
+import { css } from "../../styled-system/css";
 import { Link } from "wouter";
-import routes from "./config/routes.ts";
+import routes from "../config/routes.ts";
 
 function Explore() {
   const containerStyles = css({
