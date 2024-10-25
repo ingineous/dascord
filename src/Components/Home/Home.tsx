@@ -2,6 +2,7 @@ import { css } from "../../../styled-system/css";
 import Button from "../Button.tsx";
 import { Link } from "wouter";
 import supabase from "../../supabase.ts";
+import routes from "../../config/routes.ts";
 
 function Home() {
   const styles = css({
@@ -79,7 +80,7 @@ function Home() {
             <span className={underline}>dascord.</span>
           </p>
 
-          <Link href={"/auth"}>
+          <Link href={routes.auth}>
             <Button />
           </Link>
         </div>

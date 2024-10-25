@@ -1,9 +1,11 @@
 import { css } from "../../../styled-system/css";
-import { IoHomeOutline } from "react-icons/io5";
 import { LiaUserFriendsSolid } from "react-icons/lia";
+import { SlCompass } from "react-icons/sl";
 import Search from "./Search.tsx";
 import Editor from "./Editor.tsx";
 import Message from "./Message.tsx";
+import { Link } from "wouter";
+import routes from "../../config/routes.ts";
 
 function Main() {
   const styles = css({
@@ -49,7 +51,7 @@ function Main() {
   });
 
   const iconStyles = css({
-    fontSize: "34px",
+    fontSize: "32px",
     position: "relative",
     top: "-5px",
     cursor: "pointer",
@@ -91,7 +93,9 @@ function Main() {
         </div>
 
         <div className={iconContainerStyles}>
-          <IoHomeOutline className={iconStyles} />
+          <Link href={routes.explore}>
+            <SlCompass className={iconStyles} />
+          </Link>
           <LiaUserFriendsSolid className={iconStyles} />
 
           <Search />
