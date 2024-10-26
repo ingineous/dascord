@@ -9,6 +9,7 @@ import routes from "./config/routes.ts";
 import ChatPage from "./Components/ChatPage/ChatPage.tsx";
 import Explore from "./Components/Explore.tsx";
 import Friends from "./Components/Friends/Friends.tsx";
+import Settings from "./Components/Settings/Settings.tsx";
 
 function App() {
   const styles = css({
@@ -62,6 +63,7 @@ function App() {
         <Route path={routes.chat} component={ChatPage} />
         <Route path={routes.explore} component={Explore} />
         <Route path={routes.friends} component={Friends} />
+        <Route path={routes.settings} component={Settings} />
       </Switch>
     </div>
   );

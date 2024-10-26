@@ -1,4 +1,5 @@
 import { css } from "../../../styled-system/css";
+import { CiSettings } from "react-icons/ci";
 
 function Profile({
   avatar,
@@ -22,6 +23,7 @@ function Profile({
     height: "7vh",
     alignItems: "center",
     justifyContent: "space-between",
+    position: "relative",
   });
 
   const descriptionStyles = css({
@@ -53,6 +55,14 @@ function Profile({
     margin: "10px 0 0 0",
   });
 
+  const cogwheelStyles = css({
+    fontSize: "24px",
+    position: "absolute",
+    cursor: "pointer",
+    top: "10px",
+    right: "10px",
+  });
+
   return (
     <div className={containerStyles}>
       <div className={styles}>
@@ -62,6 +72,7 @@ function Profile({
           <p className={usernameStyles}>{username}</p>
           <p>{bio}</p>
         </div>
+        <CiSettings className={cogwheelStyles} />
       </div>
 
       <hr className={barStyles} />

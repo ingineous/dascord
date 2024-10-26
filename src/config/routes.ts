@@ -4,6 +4,7 @@ const routes = {
   chat: "/chat",
   explore: "/chat/explore",
   friends: "/chat/friends",
+  settings: "/settings",
 };
 
 export default routes;
