@@ -8,10 +8,20 @@ import { IoMdAttach } from "react-icons/io";
 import { useEffect, useState } from "react";
 import Files from "./Files.tsx";
 import Link from "@tiptap/extension-link";
+import api from "../../config/axios.ts";
+import readFileAsDataURL from "../../utils/readAsDataUrl.ts";
+import { useAuth } from "../../state/auth.ts";
 
 const content = ``;
 
+interface FileInterface {
+  name: string;
+  url: string;
+}
+
 const Editor = () => {
+  const { session } = useAuth();
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -56,7 +66,7 @@ const Editor = () => {
     },
   });
 
-  const onEnter = (event: {
+  const onEnter = async (event: {
     key: string;
     preventDefault: () => void;
     ctrlKey: boolean;
@@ -67,7 +77,27 @@ const Editor = () => {
 
       editor?.commands.clearContent();
 
-      console.log("enterrrrrrr", content);
+      const filesList: Array<FileInterface> = [];
+
+      for (let i = 0; i < files.length; i++) {
+        const name = files[i].name;
+        const url = await readFileAsDataURL(files[i]);
+
+        filesList.push({ name, url });
+      }
+
+      const data = await api.post("/send-msg", {
+        accessToken: session?.access_token,
+        receiverID: "1f1b7262-c648-4a53-9511-38de1c105d76",
+        text: content,
+        files: filesList,
+      });
+
+      console.log("dad", data);
+
+      // window.open(data.data[0].files[0].url, "_blank")?.focus();
+
+      // console.log("enterrrrrrr", "dad", content, data);
     }
   };
 
@@ -92,6 +122,7 @@ const Editor = () => {
 
         <input
           type="file"
+          // accept={"image/*"}
           id={"uploader"}
           style={{ display: "none" }}
           multiple={true}

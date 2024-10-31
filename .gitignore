@@ -29,3 +29,5 @@ styled-system-studio
 
 tsconfig.app.tsbuildinfo
 tsconfig.node.tsbuildinfo
+
+.env.local
