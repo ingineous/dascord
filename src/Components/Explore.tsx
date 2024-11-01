@@ -5,6 +5,7 @@ import routes from "../config/routes.ts";
 import { useEffect, useState } from "react";
 import { useAuth, User } from "../state/auth.ts";
 import api from "../config/axios.ts";
+import WhySoEmpty from "./WhySoEmpty.tsx";
 
 function Explore() {
   const containerStyles = css({
@@ -73,7 +74,7 @@ function Explore() {
     textDecoration: "underline",
 
     _hover: {
-      color: "antiFlashWhite",
+      color: "antiFlashWhite !important",
     },
   });
 
@@ -113,9 +114,30 @@ function Explore() {
     }
   };
 
+  const acceptRequest = async (initiatorID: string) => {
+    try {
+      const { data } = await api.post("/accept-request", {
+        accessToken: session?.access_token,
+        initiatorID,
+      });
+
+      console.log("dandadan", data);
+
+      setUser(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     console.log("street niggas", niggas);
   }, [niggas]);
+
+  const noColorOnHover = css({
+    _hover: {
+      color: "#785964 !important",
+    },
+  });
 
   return (
     <Protected>
@@ -126,9 +148,12 @@ function Explore() {
 
         <h1 className={titleStyles}>find yo niggas.</h1>
 
+        {!niggas.length && <WhySoEmpty />}
+
         <div className={mainStyles}>
           {niggas.map((nigga) => {
             const ifReqSent = user?.requestsSent.includes(nigga.authID);
+            const ifReqReceived = user?.requestsReceived.includes(nigga.authID);
 
             return (
               <div className={itemStyles} key={nigga.authID}>
@@ -139,15 +164,21 @@ function Explore() {
                   <p className={descriptionStyles}>{nigga.bio}</p>
 
                   <button
-                    className={buttonStyles}
+                    className={`${buttonStyles} ${ifReqSent && noColorOnHover}`}
                     style={{
-                      color: ifReqSent ? "#785964" : "inherit",
+                      color: ifReqSent ? "#785964" : "#989f9e",
                       cursor: ifReqSent ? "initial" : "pointer",
                     }}
-                    onClick={() => friendTheNigga(nigga.authID)}
+                    onClick={() =>
+                      ifReqReceived
+                        ? acceptRequest(nigga.authID)
+                        : friendTheNigga(nigga.authID)
+                    }
                     disabled={ifReqSent}
                   >
-                    {ifReqSent ? "req sent" : "friend me -->"}
+                    {ifReqSent && "req sent."}
+                    {ifReqReceived && "accept req bitch."}
+                    {!ifReqSent && !ifReqReceived && "friend me -->"}
                   </button>
                 </div>
               </div>

@@ -2,8 +2,10 @@ import { css } from "../../../styled-system/css";
 import routes from "../../config/routes.ts";
 import { Link } from "wouter";
 import Protected from "../Protected/Protected.tsx";
-import { IoCheckmarkSharp } from "react-icons/io5";
-import { AiOutlineClose } from "react-icons/ai";
+import { useAuth, User } from "../../state/auth.ts";
+import { useEffect, useState } from "react";
+import api from "../../config/axios.ts";
+import WhySoEmpty from "../WhySoEmpty.tsx";
 
 function Friends() {
   const containerStyles = css({
@@ -25,10 +27,9 @@ function Friends() {
   });
 
   const titleStyles = css({
-    fontSize: "54px",
+    fontSize: "56px",
     height: "15vh",
-    marginTop: "30px",
-    fontWeight: "900",
+    marginTop: "80px",
   });
 
   const profileStyles = css({
@@ -57,38 +58,52 @@ function Friends() {
     width: "100%",
     columnGap: "10px",
     rowGap: "10px",
-    height: "75vh",
+    height: "70vh",
     overflowY: "auto",
     justifyContent: "space-around",
   });
 
   const buttonStyles = css({
     fontSize: "18px",
-    borderRadius: "300px",
-    padding: "5px",
     cursor: "pointer",
-    background: "onyx",
-    display: "flex",
-    justifyContent: "center",
-    width: "70px",
-    marginRight: "10px",
+    color: "roseTaupe",
+    textDecoration: "underline",
 
-    transition: "background 0.1s linear",
+    transition: "color 0.05s linear",
 
     _hover: {
-      background: "rgba(26,77,60,0.5)",
+      color: "rosePompadour",
     },
   });
 
-  const buttonContainer = css({
-    display: "flex",
-  });
+  const { user, session, setUser } = useAuth();
 
-  const closeButtonStyles = css({
-    _hover: {
-      background: "rgba(110,20,20,0.5) !important",
-    },
-  });
+  const [niggas, setNiggas] = useState<Array<User>>([]);
+
+  useEffect(() => {
+    const getNiggas = async () => {
+      const { data } = await api.post("/get-request-niggas", {
+        accessToken: session?.access_token,
+      });
+
+      setNiggas(data.niggas);
+    };
+
+    getNiggas();
+  }, [user?.requestsReceived]);
+
+  const acceptRequest = async (initiatorID: string) => {
+    try {
+      const { data } = await api.post("/accept-request", {
+        accessToken: session?.access_token,
+        initiatorID,
+      });
+
+      setUser(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <Protected>
@@ -98,71 +113,29 @@ function Friends() {
         </Link>
         <h1 className={titleStyles}>niggas who want you.</h1>
 
+        {!niggas.length && <WhySoEmpty text={"why so lonely?"} />}
         <div className={friendsContainer}>
-          <div className={friendStyle}>
-            <img className={profileStyles} src="/ayase.webp" alt="profile" />
-            <div>
-              <p className={nameStyle}>ayase momo.</p>
+          {niggas.map((nigga) => {
+            return (
+              <div className={friendStyle} key={nigga.authID}>
+                <img
+                  className={profileStyles}
+                  src={nigga.avatar}
+                  alt="profile"
+                />
+                <div>
+                  <p className={nameStyle}>{nigga.name}</p>
 
-              <div className={buttonContainer}>
-                <button className={buttonStyles}>
-                  <IoCheckmarkSharp />
-                </button>
-
-                <button className={`${buttonStyles} ${closeButtonStyles}`}>
-                  <AiOutlineClose />
-                </button>
+                  <button
+                    className={buttonStyles}
+                    onClick={() => acceptRequest(nigga.authID)}
+                  >
+                    accept {"-->"}
+                  </button>
+                </div>
               </div>
-            </div>
-          </div>{" "}
-          <div className={friendStyle}>
-            <img className={profileStyles} src="/ayase.webp" alt="profile" />
-            <div>
-              <p className={nameStyle}>ayase momo.</p>
-
-              <div className={buttonContainer}>
-                <button className={buttonStyles}>
-                  <IoCheckmarkSharp />
-                </button>
-
-                <button className={`${buttonStyles} ${closeButtonStyles}`}>
-                  <AiOutlineClose />
-                </button>
-              </div>
-            </div>
-          </div>{" "}
-          <div className={friendStyle}>
-            <img className={profileStyles} src="/ayase.webp" alt="profile" />
-            <div>
-              <p className={nameStyle}>ayase momo.</p>
-
-              <div className={buttonContainer}>
-                <button className={buttonStyles}>
-                  <IoCheckmarkSharp />
-                </button>
-
-                <button className={`${buttonStyles} ${closeButtonStyles}`}>
-                  <AiOutlineClose />
-                </button>
-              </div>
-            </div>
-          </div>{" "}
-          <div className={friendStyle}>
-            <img className={profileStyles} src="/ayase.webp" alt="profile" />
-            <div>
-              <p className={nameStyle}>ayase momo.</p>
-
-              <div className={buttonContainer}>
-                <button className={buttonStyles}>
-                  <IoCheckmarkSharp />
-                </button>
-
-                <button className={`${buttonStyles} ${closeButtonStyles}`}>
-                  <AiOutlineClose />
-                </button>
-              </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </div>
     </Protected>
