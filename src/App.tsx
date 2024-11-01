@@ -2,7 +2,7 @@ import { css } from "../styled-system/css";
 import Home from "./Components/Home/Home.tsx";
 import { Route, Switch } from "wouter";
 import Auth from "./Components/Auth/Auth.tsx";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import supabase from "./supabase.ts";
 import { useAuth } from "./state/auth.ts";
 import routes from "./config/routes.ts";
@@ -10,8 +10,9 @@ import ChatPage from "./Components/ChatPage/ChatPage.tsx";
 import Explore from "./Components/Explore.tsx";
 import Friends from "./Components/Friends/Friends.tsx";
 import Settings from "./Components/Settings/Settings.tsx";
-import { io, Socket } from "socket.io-client";
-import { API_URL } from "./config/axios.ts";
+import { io } from "socket.io-client";
+import api, { API_URL } from "./config/axios.ts";
+import { useSocket } from "./state/socket.ts";
 
 function App() {
   const styles = css({
@@ -22,14 +23,9 @@ function App() {
     fontFamily: "IBM Plex Mono, monospace",
   });
 
-  const { session, loading, setSession, setLoading, setError } = useAuth();
-  const [socket, setSocket] = useState<Socket | null>(null);
-
-  // const [isConnected, setIsConnected] = useState(socket.connected);
-
-  // useEffect(() => {
-  //   console.log("connnnn", isConnected);
-  // }, [isConnected]);
+  const { session, loading, setSession, setLoading, setError, setUser, user } =
+    useAuth();
+  const { socket, setSocket } = useSocket();
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
@@ -90,15 +86,26 @@ function App() {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setSession(session);
+      if (session) {
+        try {
+          const { data: authUser } = await api.post("/register", {
+            accessToken: session.access_token,
+          });
+
+          setUser(authUser);
+        } catch (error) {
+          console.error(error);
+        }
+      }
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
   useEffect(() => {
-    console.log("sesssisosnsnsn change", session, loading);
+    console.log("sesssisosnsnsn change", session, loading, user);
   }, [session]);
 
   return (

@@ -2,6 +2,9 @@ import Protected from "./Protected/Protected.tsx";
 import { css } from "../../styled-system/css";
 import { Link } from "wouter";
 import routes from "../config/routes.ts";
+import { useEffect, useState } from "react";
+import { useAuth, User } from "../state/auth.ts";
+import api from "../config/axios.ts";
 
 function Explore() {
   const containerStyles = css({
@@ -74,6 +77,46 @@ function Explore() {
     },
   });
 
+  const { session, user, setUser } = useAuth();
+
+  const [niggas, setNiggas] = useState<Array<User>>([]);
+
+  useEffect(() => {
+    if (!user || !session) return;
+
+    const getNiggas = async () => {
+      try {
+        const { data } = await api.post("/get-niggas", {
+          accessToken: session?.access_token,
+        });
+
+        setNiggas(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getNiggas();
+  }, [session, user]);
+
+  const friendTheNigga = async (receiverID: string) => {
+    try {
+      const { data } = await api.post("/friend-request", {
+        accessToken: session?.access_token,
+        receiverID,
+      });
+
+      console.log("dandadan", data);
+      setUser(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    console.log("street niggas", niggas);
+  }, [niggas]);
+
   return (
     <Protected>
       <div className={containerStyles}>
@@ -81,135 +124,35 @@ function Explore() {
           return to chat.
         </Link>
 
-        <h1 className={titleStyles}>friend some niggas.</h1>
+        <h1 className={titleStyles}>find yo niggas.</h1>
 
         <div className={mainStyles}>
-          <div className={itemStyles}>
-            <img className={imgStyle} src="/ayase.webp" alt="idk" />
+          {niggas.map((nigga) => {
+            const ifReqSent = user?.requestsSent.includes(nigga.authID);
 
-            <div>
-              <p className={nameStyle}>momo ayase</p>
-              <p className={descriptionStyles}>
-                let me give you some advice bastard. dont forget who you are
-                cause the rest of the world would never. wear it like an armour
-                and it could never be used to hurt you.
-              </p>
+            return (
+              <div className={itemStyles} key={nigga.authID}>
+                <img className={imgStyle} src={nigga.avatar} alt="pic" />
 
-              <button className={buttonStyles}>friend me{" -->"}</button>
-            </div>
-          </div>
-          <div className={itemStyles}>
-            <img className={imgStyle} src="/ayase.webp" alt="idk" />
+                <div>
+                  <p className={nameStyle}>{nigga.name}</p>
+                  <p className={descriptionStyles}>{nigga.bio}</p>
 
-            <div>
-              <p className={nameStyle}>momo ayase</p>
-              <p className={descriptionStyles}>
-                let me give you some advice bastard. dont forget who you are
-                cause the rest of the world would never. wear it like an armour
-                and it could never be used to hurt you.
-              </p>
-
-              <button className={buttonStyles}>friend me{" -->"}</button>
-            </div>
-          </div>
-          <div className={itemStyles}>
-            <img className={imgStyle} src="/ayase.webp" alt="idk" />
-
-            <div>
-              <p className={nameStyle}>momo ayase</p>
-              <p className={descriptionStyles}>
-                let me give you some advice bastard. dont forget who you are
-                cause the rest of the world would never. wear it like an armour
-                and it could never be used to hurt you.
-              </p>
-
-              <button className={buttonStyles}>friend me{" -->"}</button>
-            </div>
-          </div>
-          <div className={itemStyles}>
-            <img className={imgStyle} src="/ayase.webp" alt="idk" />
-
-            <div>
-              <p className={nameStyle}>momo ayase</p>
-              <p className={descriptionStyles}>
-                let me give you some advice bastard. dont forget who you are
-                cause the rest of the world would never. wear it like an armour
-                and it could never be used to hurt you.
-              </p>
-
-              <button className={buttonStyles}>friend me{" -->"}</button>
-            </div>
-          </div>
-          <div className={itemStyles}>
-            <img className={imgStyle} src="/ayase.webp" alt="idk" />
-
-            <div>
-              <p className={nameStyle}>momo ayase</p>
-              <p className={descriptionStyles}>
-                let me give you some advice bastard. dont forget who you are
-                cause the rest of the world would never. wear it like an armour
-                and it could never be used to hurt you.
-              </p>
-
-              <button className={buttonStyles}>friend me{" -->"}</button>
-            </div>
-          </div>
-          <div className={itemStyles}>
-            <img className={imgStyle} src="/ayase.webp" alt="idk" />
-
-            <div>
-              <p className={nameStyle}>momo ayase</p>
-              <p className={descriptionStyles}>
-                let me give you some advice bastard. dont forget who you are
-                cause the rest of the world would never. wear it like an armour
-                and it could never be used to hurt you.
-              </p>
-
-              <button className={buttonStyles}>friend me{" -->"}</button>
-            </div>
-          </div>
-          <div className={itemStyles}>
-            <img className={imgStyle} src="/ayase.webp" alt="idk" />
-
-            <div>
-              <p className={nameStyle}>momo ayase</p>
-              <p className={descriptionStyles}>
-                let me give you some advice bastard. dont forget who you are
-                cause the rest of the world would never. wear it like an armour
-                and it could never be used to hurt you.
-              </p>
-
-              <button className={buttonStyles}>friend me{" -->"}</button>
-            </div>
-          </div>
-          <div className={itemStyles}>
-            <img className={imgStyle} src="/ayase.webp" alt="idk" />
-
-            <div>
-              <p className={nameStyle}>momo ayase</p>
-              <p className={descriptionStyles}>
-                let me give you some advice bastard. dont forget who you are
-                cause the rest of the world would never. wear it like an armour
-                and it could never be used to hurt you.
-              </p>
-
-              <button className={buttonStyles}>friend me{" -->"}</button>
-            </div>
-          </div>
-          <div className={itemStyles}>
-            <img className={imgStyle} src="/ayase.webp" alt="idk" />
-
-            <div>
-              <p className={nameStyle}>momo ayase</p>
-              <p className={descriptionStyles}>
-                let me give you some advice bastard. dont forget who you are
-                cause the rest of the world would never. wear it like an armour
-                and it could never be used to hurt you.
-              </p>
-
-              <button className={buttonStyles}>friend me{" -->"}</button>
-            </div>
-          </div>
+                  <button
+                    className={buttonStyles}
+                    style={{
+                      color: ifReqSent ? "#785964" : "inherit",
+                      cursor: ifReqSent ? "initial" : "pointer",
+                    }}
+                    onClick={() => friendTheNigga(nigga.authID)}
+                    disabled={ifReqSent}
+                  >
+                    {ifReqSent ? "req sent" : "friend me -->"}
+                  </button>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </Protected>

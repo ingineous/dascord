@@ -6,6 +6,7 @@ import Editor from "./Editor.tsx";
 import Message from "./Message.tsx";
 import { Link } from "wouter";
 import routes from "../../config/routes.ts";
+import { useAuth } from "../../state/auth.ts";
 
 function Main() {
   const styles = css({
@@ -19,7 +20,6 @@ function Main() {
     height: "7%",
     padding: "5px 40px",
     position: "relative",
-    top: "-5px",
     alignItems: "center",
     justifyContent: "space-between",
   });
@@ -37,10 +37,11 @@ function Main() {
   });
 
   const nameStyles = css({
-    fontSize: "24px",
+    fontSize: "18px",
   });
 
   const descriptionStyles = css({
+    marginTop: "10px",
     fontSize: "14px",
   });
 
@@ -82,14 +83,14 @@ function Main() {
     overflowY: "auto",
   });
 
+  const { user } = useAuth();
+
   return (
     <div className={styles}>
       <div className={topbarStyles}>
         <div className={aboutStyles}>
-          <p className={nameStyles}>momo</p>
-          <p className={descriptionStyles}>
-            The man who passes the sentence should swing the sowrd.
-          </p>
+          <p className={nameStyles}>{user?.name}</p>
+          <p className={descriptionStyles}>{user?.bio}</p>
         </div>
 
         <div className={iconContainerStyles}>

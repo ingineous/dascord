@@ -4,12 +4,12 @@ import truncate from "../../utils/truncate.ts";
 function Chat({
   initial = false,
   avatar,
-  username,
+  name,
   text,
 }: {
   initial?: boolean;
   avatar: string;
-  username: string;
+  name: string;
   text: string;
 }) {
   const styles = css({
@@ -33,18 +33,20 @@ function Chat({
 
   const nameStyles = css({
     fontWeight: "900",
+    fontSize: "12px",
   });
 
   const textStyles = css({
     fontWeight: "300",
-    marginLeft: "10px",
   });
 
   return (
     <div className={styles} style={{ paddingTop: initial ? 10 : 5 }}>
       <img className={picStyles} src={avatar} alt="user pic" />
-      <p className={nameStyles}>{username}: </p>
-      <p className={textStyles}>{truncate(text, 20)}</p>
+      <div>
+        <p className={nameStyles}>{truncate(name, 20)} </p>
+        <p className={textStyles}>{truncate(text, 20)}</p>
+      </div>
     </div>
   );
 }

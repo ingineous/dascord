@@ -3,6 +3,10 @@ import { css } from "../../../styled-system/css";
 import Profile from "./Profile.tsx";
 import Chat from "./Chat.tsx";
 import Main from "./Main.tsx";
+import { useAuth, User } from "../../state/auth.ts";
+import truncate from "../../utils/truncate.ts";
+import { useEffect, useState } from "react";
+import api from "../../config/axios.ts";
 
 function ChatPage() {
   const mainStyles = css({
@@ -29,271 +33,55 @@ function ChatPage() {
     overflowY: "auto",
   });
 
+  const { session, user } = useAuth();
+
+  const [friends, setFriends] = useState<Array<User>>([]);
+
+  useEffect(() => {
+    if (!user || !session) return;
+
+    const getFriends = async () => {
+      try {
+        const { data } = await api.post("/friends", {
+          accessToken: session?.access_token,
+        });
+
+        setFriends(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getFriends();
+  }, [session, user]);
+
+  useEffect(() => {
+    console.log("fraaands", friends);
+  }, [friends]);
+
   return (
     <Protected>
       <div className={mainStyles}>
         <div className={sidebarStyles}>
           <Profile
-            avatar={"/ayase.webp"}
-            username={"momo."}
-            bio={"the dead dont need lovers."}
+            avatar={user?.avatar || ""}
+            username={truncate(user?.name, 20)}
+            bio={truncate(user?.bio, 20)}
           />
 
           <div className={chatContainerStyles}>
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={"the ones who die a idk"}
-            />{" "}
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />{" "}
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />{" "}
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />{" "}
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />{" "}
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
-            <Chat
-              initial
-              avatar={"/ayase.webp"}
-              username={"momo"}
-              text={
-                "the ones who shoulda kill are the ones who are prepared to die."
-              }
-            />
+            {friends.map((friend, index) => {
+              console.log(friend.avatar);
+              return (
+                <Chat
+                  key={friend.authID}
+                  initial={index === 0}
+                  avatar={friend.avatar}
+                  name={friend.name}
+                  text={friend.bio}
+                />
+              );
+            })}
           </div>
         </div>
 
