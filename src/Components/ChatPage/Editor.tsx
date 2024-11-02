@@ -12,6 +12,8 @@ import api from "../../config/axios.ts";
 import readFileAsDataURL from "../../utils/readAsDataUrl.ts";
 import { useAuth } from "../../state/auth.ts";
 import { useChat } from "../../state/chat.ts";
+import { useKey } from "../../state/key.ts";
+import { ab2str, importPrivateKey, str2ab } from "../../utils/encryption.ts";
 
 const content = ``;
 
@@ -68,6 +70,7 @@ const Editor = () => {
   });
 
   const { currentUser } = useChat();
+  const { privateKey } = useKey();
 
   const onEnter = async (event: {
     key: string;
@@ -87,6 +90,58 @@ const Editor = () => {
         const url = await readFileAsDataURL(files[i]);
 
         filesList.push({ name, url });
+      }
+
+      function encode(message: string) {
+        const enc = new TextEncoder();
+        return enc.encode(message);
+      }
+
+      function decode(message: ArrayBuffer) {
+        const enc = new TextDecoder();
+        return enc.decode(message);
+      }
+
+      const publicKey = await window.crypto.subtle.importKey(
+        "jwk",
+        currentUser?.publicKey,
+        {
+          name: "RSA-OAEP",
+          hash: "SHA-256",
+        },
+        true,
+        ["encrypt"],
+      );
+
+      const importedPrivateKey = await importPrivateKey(privateKey || "");
+
+      const iv = window.crypto.getRandomValues(new Uint8Array(16));
+
+      const encrypted = await window.crypto.subtle.encrypt(
+        {
+          name: "RSA-OAEP",
+          iv,
+        },
+        publicKey,
+        encode(content || ""),
+      );
+
+      try {
+        const decrypted = await window.crypto.subtle.decrypt(
+          { name: "RSA-OAEP", iv },
+          importedPrivateKey,
+          str2ab(ab2str(encrypted)),
+        );
+
+        console.log(
+          "encrypted",
+          encrypted,
+          ab2str(encrypted),
+          decrypted,
+          decode(decrypted),
+        );
+      } catch (e) {
+        console.log(e);
       }
 
       const data = await api.post("/send-msg", {
@@ -125,7 +180,6 @@ const Editor = () => {
 
         <input
           type="file"
-          // accept={"image/*"}
           id={"uploader"}
           style={{ display: "none" }}
           multiple={true}

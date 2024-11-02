@@ -5,6 +5,7 @@ const routes = {
   explore: "/chat/explore",
   friends: "/chat/friends",
   settings: "/settings",
+  authCallback: "/auth/callback",
 };
 
 export default routes;

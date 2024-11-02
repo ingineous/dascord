@@ -8,7 +8,9 @@ export interface User {
   bio: string;
   requestsSent: string[];
   requestsReceived: string[];
-  friends: string[];
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  friends: string[]; // @ts-ignore
+  publicKey: any;
 }
 
 interface AuthProps {

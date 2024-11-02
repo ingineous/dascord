@@ -14,6 +14,12 @@ import { io } from "socket.io-client";
 import api, { API_URL } from "./config/axios.ts";
 import { useSocket } from "./state/socket.ts";
 import { Message, useChat } from "./state/chat.ts";
+import {
+  exportPrivateCryptoKey,
+  exportPublicCryptoKey,
+  initializeKeys,
+} from "./utils/encryption.ts";
+import AuthCallback from "./Components/AuthCallback.tsx";
 
 function App() {
   const styles = css({
@@ -109,7 +115,7 @@ function App() {
         try {
           console.log("registring");
 
-          const { data: authUser } = await api.post("/register", {
+          const { data: authUser } = await api.post("/get-user", {
             accessToken: session.access_token,
           });
 
@@ -129,6 +135,15 @@ function App() {
     console.log("sesssisosnsnsn change", session, loading, user);
   }, [session]);
 
+  useEffect(() => {
+    const key = async () => {
+      const keypair = await initializeKeys();
+      exportPublicCryptoKey(keypair);
+      exportPrivateCryptoKey(keypair);
+    };
+
+    key();
+  }, []);
   return (
     <div className={styles}>
       <Switch>
@@ -138,6 +153,7 @@ function App() {
         <Route path={routes.explore} component={Explore} />
         <Route path={routes.friends} component={Friends} />
         <Route path={routes.settings} component={Settings} />
+        <Route path={routes.authCallback} component={AuthCallback} />
       </Switch>
     </div>
   );
