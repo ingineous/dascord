@@ -2,7 +2,7 @@ import { css } from "../styled-system/css";
 import Home from "./Components/Home/Home.tsx";
 import { Route, Switch } from "wouter";
 import Auth from "./Components/Auth/Auth.tsx";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import supabase from "./supabase.ts";
 import { useAuth } from "./state/auth.ts";
 import routes from "./config/routes.ts";
@@ -13,6 +13,7 @@ import Settings from "./Components/Settings/Settings.tsx";
 import { io } from "socket.io-client";
 import api, { API_URL } from "./config/axios.ts";
 import { useSocket } from "./state/socket.ts";
+import { useChat } from "./state/chat.ts";
 
 function App() {
   const styles = css({
@@ -26,6 +27,7 @@ function App() {
   const { session, loading, setSession, setLoading, setError, setUser, user } =
     useAuth();
   const { socket, setSocket } = useSocket();
+  const { chats, setChats } = useChat();
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
@@ -41,12 +43,8 @@ function App() {
   }, [setSocket, session]);
 
   useEffect(() => {
-    console.log("sockettt", socket?.connected);
-  }, [socket]);
-
-  useEffect(() => {
     function onConnect() {
-      console.log("connected", socket?.connected, socket);
+      console.log("connected", socket?.connected, socket?.id);
     }
 
     function onDisconnect() {
@@ -55,14 +53,33 @@ function App() {
 
     if (!socket) return;
 
+    const onMsg = async (data) => {
+      console.log("whore outside", data, chats);
+
+      const chatMap = chats.map((chat) => {
+        if (chat.authID === data.userID) {
+          return {
+            ...chat,
+            messages: [data.message, ...chat.messages],
+          };
+        }
+
+        return chat;
+      });
+
+      setChats(chatMap);
+    };
+
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
+    socket.on("newmsg", onMsg);
 
     return () => {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
+      socket.off("newmsg", onMsg);
     };
-  }, [socket]);
+  }, [socket, chats]);
 
   useEffect(() => {
     const getSession = async () => {

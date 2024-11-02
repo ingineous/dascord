@@ -7,7 +7,7 @@ import Message from "./Message.tsx";
 import { Link } from "wouter";
 import routes from "../../config/routes.ts";
 import { useChat } from "../../state/chat.ts";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../state/auth.ts";
 
 function Main() {
@@ -87,10 +87,45 @@ function Main() {
 
   const { currentUser, chats, currentChat } = useChat();
   const { user } = useAuth();
+  const [messages, setMessages] = useState<Element[]>([]);
 
   useEffect(() => {
-    console.log("cureneter", chats[currentChat]);
-  }, [chats, currentChat]);
+    console.log(
+      "chat changer cureneter",
+      chats[currentChat],
+      chats,
+      currentUser,
+    );
+  }, [chats, currentChat, currentUser]);
+
+  useEffect(() => {
+    if (!chats[currentChat]) return;
+
+    const newChat = chats[currentChat].messages.map((chat, index) => {
+      return (
+        <Message
+          key={index}
+          message={chat.text}
+          name={
+            chat.dude === currentUser?.authID
+              ? currentUser.name
+              : (user?.name as string)
+          }
+          avatar={
+            chat.dude === currentUser?.authID
+              ? currentUser.avatar
+              : (user?.avatar as string)
+          }
+          files={chat.files}
+          time={chat.time}
+        />
+      );
+    });
+
+    console.log("new chat", newChat);
+
+    setMessages([...newChat]);
+  }, [chats, currentChat, currentUser, user]);
 
   return (
     <div className={styles}>
@@ -115,27 +150,7 @@ function Main() {
       <hr className={barStyles} />
 
       <div className={mainStyles}>
-        <div className={messagesContainer}>
-          {chats[currentChat] &&
-            chats[currentChat].messages.map((chat, index) => (
-              <Message
-                key={index}
-                message={chat.text}
-                name={
-                  chat.dude === currentUser?.authID
-                    ? currentUser.name
-                    : (user?.name as string)
-                }
-                avatar={
-                  chat.dude === currentUser?.authID
-                    ? currentUser.avatar
-                    : (user?.avatar as string)
-                }
-                files={chat.files}
-                time={chat.time}
-              />
-            ))}
-        </div>
+        <div className={messagesContainer}>{messages}</div>
 
         <div className={editorContainer}>
           <Editor />

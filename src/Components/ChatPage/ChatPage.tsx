@@ -55,10 +55,6 @@ function ChatPage() {
     getFriends();
   }, [session, user]);
 
-  useEffect(() => {
-    console.log("fraaands", friends);
-  }, [friends]);
-
   return (
     <Protected>
       <div className={mainStyles}>
@@ -71,7 +67,6 @@ function ChatPage() {
 
           <div className={chatContainerStyles}>
             {friends.map((friend, index) => {
-              console.log(friend.avatar);
               return (
                 <Chat
                   key={friend.authID}

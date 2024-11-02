@@ -6,6 +6,9 @@ import { css } from "../../../styled-system/css";
 import Link from "@tiptap/extension-link";
 import MessageFilePreview from "./MessageFilePreview.tsx";
 import { formatDistance } from "date-fns";
+import DOMPurify from "isomorphic-dompurify";
+import { nanoid } from "nanoid/non-secure";
+import { useEffect, useMemo } from "react";
 
 function Message({
   message,
@@ -85,6 +88,8 @@ function Message({
 
   const currentTime = formatDistance(new Date(), time);
 
+  const id = useMemo(() => nanoid(10), []);
+
   return (
     <div className={containerStyles}>
       <img className={profileStyles} src={avatar} alt="profile" />
@@ -93,7 +98,14 @@ function Message({
           <span>{name}:</span>
           <span className={timeStyles}>{currentTime} ago</span>
         </p>
-        <EditorContent className={editorStyles + " message"} editor={editor} />
+        <p
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(message),
+          }}
+          id={id}
+          className={editorStyles + " message"}
+        ></p>
+        {/*<EditorContent className={editorStyles + " message"} editor={editor} />*/}
         <div className={filesContainer}>
           {files &&
             files.map((file, index) => (

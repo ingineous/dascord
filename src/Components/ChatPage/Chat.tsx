@@ -49,8 +49,7 @@ function Chat({
   });
 
   const { session } = useAuth();
-  const { currentUser, setCurrentUser, chats, setChats, setCurrentChat } =
-    useChat();
+  const { setCurrentUser, chats, setChats, setCurrentChat } = useChat();
 
   const getChat = async () => {
     const { data } = await api.post("/chat", {
@@ -69,6 +68,7 @@ function Chat({
     for (let i = 0; i < chats.length; i++) {
       if (chats[i].authID === friend.authID) {
         inChat = true;
+        console.log("setting chatter", i);
         setCurrentChat(i);
         break;
       }
@@ -80,6 +80,7 @@ function Chat({
 
     if (!inChat) {
       setCurrentChat(newChats.length - 1);
+      console.log("setting chatter from insider", newChats.length - 1);
       setChats(newChats);
     }
 
@@ -87,9 +88,8 @@ function Chat({
   };
 
   useEffect(() => {
-    console.log("currant", currentUser, chats);
-  }, [currentUser, chats]);
-
+    console.log("chat changed", chats);
+  }, [chats]);
   return (
     <div
       className={styles}

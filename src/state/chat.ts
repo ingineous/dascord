@@ -25,7 +25,10 @@ interface ChatProps {
 
 const useChat = create<ChatProps>((set) => ({
   chats: [],
-  setChats: (chats: MessageAndUsers[]) => set({ chats }),
+  setChats: (chats: MessageAndUsers[]) => {
+    console.log("setter chatterrrr", chats);
+    set({ chats });
+  },
   currentUser: null,
   setCurrentUser: (user: User | null) => set({ currentUser: user }),
   currentChat: 0,
