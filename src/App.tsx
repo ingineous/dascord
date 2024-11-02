@@ -107,13 +107,17 @@ function App() {
       setSession(session);
       if (session) {
         try {
+          console.log("registring");
+
           const { data: authUser } = await api.post("/register", {
             accessToken: session.access_token,
           });
 
+          console.log("auther", authUser);
+
           setUser(authUser);
         } catch (error) {
-          console.error(error);
+          console.log("register error", error);
         }
       }
     });

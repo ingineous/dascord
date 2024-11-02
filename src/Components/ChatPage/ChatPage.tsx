@@ -73,7 +73,6 @@ function ChatPage() {
                   initial={index === 0}
                   avatar={friend.avatar}
                   name={friend.name}
-                  text={friend.bio}
                   authID={friend.authID}
                   friend={friend}
                 />
