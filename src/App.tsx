@@ -2,7 +2,7 @@ import { css } from "../styled-system/css";
 import Home from "./Components/Home/Home.tsx";
 import { Route, Switch } from "wouter";
 import Auth from "./Components/Auth/Auth.tsx";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import supabase from "./supabase.ts";
 import { useAuth } from "./state/auth.ts";
 import routes from "./config/routes.ts";
@@ -13,7 +13,7 @@ import Settings from "./Components/Settings/Settings.tsx";
 import { io } from "socket.io-client";
 import api, { API_URL } from "./config/axios.ts";
 import { useSocket } from "./state/socket.ts";
-import { useChat } from "./state/chat.ts";
+import { Message, useChat } from "./state/chat.ts";
 
 function App() {
   const styles = css({
@@ -53,7 +53,7 @@ function App() {
 
     if (!socket) return;
 
-    const onMsg = async (data) => {
+    const onMsg = async (data: { userID: string; message: Message }) => {
       console.log("whore outside", data, chats);
 
       const chatMap = chats.map((chat) => {

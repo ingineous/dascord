@@ -3,20 +3,18 @@ import truncate from "../../utils/truncate.ts";
 import api from "../../config/axios.ts";
 import { useAuth, User } from "../../state/auth.ts";
 import { useChat, Message } from "../../state/chat.ts";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function Chat({
   initial = false,
   avatar,
   name,
-  text,
   authID,
   friend,
 }: {
   initial?: boolean;
   avatar: string;
   name: string;
-  text: string;
   authID: string;
   friend: User;
 }) {
@@ -50,6 +48,7 @@ function Chat({
 
   const { session } = useAuth();
   const { setCurrentUser, chats, setChats, setCurrentChat } = useChat();
+  const [lastText, setLastText] = useState<string>("");
 
   const getChat = async () => {
     const { data } = await api.post("/chat", {
@@ -89,7 +88,15 @@ function Chat({
 
   useEffect(() => {
     console.log("chat changed", chats);
+    chats.forEach((chat) => {
+      if (chat?.messages[0] && chat.authID === friend.authID) {
+        const html = chat.messages[0].text;
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        setLastText(doc.body.textContent || "");
+      }
+    });
   }, [chats]);
+
   return (
     <div
       className={styles}
@@ -99,7 +106,7 @@ function Chat({
       <img className={picStyles} src={avatar} alt="user pic" />
       <div>
         <p className={nameStyles}>{truncate(name, 20)} </p>
-        <p className={textStyles}>{truncate(text, 20)}</p>
+        <p className={textStyles}>{truncate(lastText, 20)}</p>
       </div>
     </div>
   );

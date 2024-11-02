@@ -1,14 +1,7 @@
-import { EditorContent, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Highlight from "@tiptap/extension-highlight";
-import Typography from "@tiptap/extension-typography";
 import { css } from "../../../styled-system/css";
-import Link from "@tiptap/extension-link";
 import MessageFilePreview from "./MessageFilePreview.tsx";
 import { formatDistance } from "date-fns";
 import DOMPurify from "isomorphic-dompurify";
-import { nanoid } from "nanoid/non-secure";
-import { useEffect, useMemo } from "react";
 
 function Message({
   message,
@@ -23,21 +16,6 @@ function Message({
   files: string[];
   time: Date;
 }) {
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Highlight,
-      Typography,
-      Link.configure({
-        autolink: true,
-        openOnClick: true,
-        linkOnPaste: true,
-      }),
-    ],
-    content: message,
-    editable: false,
-  });
-
   const containerStyles = css({
     display: "flex",
     width: "100%",
@@ -88,8 +66,6 @@ function Message({
 
   const currentTime = formatDistance(new Date(), time);
 
-  const id = useMemo(() => nanoid(10), []);
-
   return (
     <div className={containerStyles}>
       <img className={profileStyles} src={avatar} alt="profile" />
@@ -102,7 +78,6 @@ function Message({
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(message),
           }}
-          id={id}
           className={editorStyles + " message"}
         ></p>
         {/*<EditorContent className={editorStyles + " message"} editor={editor} />*/}

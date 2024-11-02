@@ -124,6 +124,8 @@ function Main() {
 
     console.log("new chat", newChat);
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     setMessages([...newChat]);
   }, [chats, currentChat, currentUser, user]);
 
@@ -150,6 +152,8 @@ function Main() {
       <hr className={barStyles} />
 
       <div className={mainStyles}>
+        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+        {/*@ts-expect-error*/}
         <div className={messagesContainer}>{messages}</div>
 
         <div className={editorContainer}>

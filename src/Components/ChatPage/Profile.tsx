@@ -1,5 +1,9 @@
 import { css } from "../../../styled-system/css";
 import { CiSettings } from "react-icons/ci";
+import api from "../../config/axios.ts";
+import { Message, useChat } from "../../state/chat.ts";
+import { useAuth } from "../../state/auth.ts";
+import { useEffect } from "react";
 
 function Profile({
   avatar,
@@ -63,8 +67,52 @@ function Profile({
     right: "10px",
   });
 
+  const { session, user } = useAuth();
+  const { chats, setCurrentChat, setCurrentUser, setChats } = useChat();
+
+  const getChat = async () => {
+    const { data } = await api.post("/chat", {
+      accessToken: session?.access_token,
+      dudette: user?.authID,
+    });
+
+    return data;
+  };
+
+  const fetchSelf = async () => {
+    const messages: Message[] = await getChat();
+
+    let inChat = false;
+
+    for (let i = 0; i < chats.length; i++) {
+      if (chats[i].authID === user?.authID) {
+        inChat = true;
+        console.log("setting chatter", i);
+        setCurrentChat(i);
+        break;
+      }
+    }
+
+    const chat = { ...user, messages };
+
+    const newChats = [...chats, chat];
+
+    if (!inChat) {
+      setCurrentChat(newChats.length - 1);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      console.log("setting chatter from insider", newChats.length - 1); // @ts-expect-error
+      setChats(newChats);
+    }
+
+    setCurrentUser(user);
+  };
+
+  useEffect(() => {
+    fetchSelf();
+  }, [user]);
+
   return (
-    <div className={containerStyles}>
+    <div className={containerStyles} onClick={fetchSelf}>
       <div className={styles}>
         <img className={avatarStyles} src={avatar} alt={"Profile Picture"} />
 
