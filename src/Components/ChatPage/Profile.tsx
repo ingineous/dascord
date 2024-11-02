@@ -87,7 +87,6 @@ function Profile({
     for (let i = 0; i < chats.length; i++) {
       if (chats[i].authID === user?.authID) {
         inChat = true;
-        console.log("setting chatter", i);
         setCurrentChat(i);
         break;
       }
@@ -100,7 +99,7 @@ function Profile({
     if (!inChat) {
       setCurrentChat(newChats.length - 1);
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      console.log("setting chatter from insider", newChats.length - 1); // @ts-expect-error
+      // @ts-ignore
       setChats(newChats);
     }
 

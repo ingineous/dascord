@@ -60,8 +60,6 @@ function App() {
     if (!socket) return;
 
     const onMsg = async (data: { userID: string; message: Message }) => {
-      console.log("whore outside", data, chats);
-
       const chatMap = chats.map((chat) => {
         if (chat.authID === data.userID) {
           return {

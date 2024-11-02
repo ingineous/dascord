@@ -67,7 +67,6 @@ function Chat({
     for (let i = 0; i < chats.length; i++) {
       if (chats[i].authID === friend.authID) {
         inChat = true;
-        console.log("setting chatter", i);
         setCurrentChat(i);
         break;
       }
@@ -79,7 +78,6 @@ function Chat({
 
     if (!inChat) {
       setCurrentChat(newChats.length - 1);
-      console.log("setting chatter from insider", newChats.length - 1);
       setChats(newChats);
     }
 

@@ -129,10 +129,6 @@ function Explore() {
     }
   };
 
-  useEffect(() => {
-    console.log("street niggas", niggas);
-  }, [niggas]);
-
   const noColorOnHover = css({
     _hover: {
       color: "#785964 !important",

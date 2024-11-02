@@ -70,6 +70,7 @@ const Editor = () => {
   });
 
   const { currentUser } = useChat();
+  const { user } = useAuth();
   const { privateKey } = useKey();
 
   const onEnter = async (event: {
@@ -97,12 +98,7 @@ const Editor = () => {
         return enc.encode(message);
       }
 
-      function decode(message: ArrayBuffer) {
-        const enc = new TextDecoder();
-        return enc.decode(message);
-      }
-
-      const publicKey = await window.crypto.subtle.importKey(
+      const otherPublicKey = await window.crypto.subtle.importKey(
         "jwk",
         currentUser?.publicKey,
         {
@@ -113,49 +109,60 @@ const Editor = () => {
         ["encrypt"],
       );
 
-      const importedPrivateKey = await importPrivateKey(privateKey || "");
-
-      const iv = window.crypto.getRandomValues(new Uint8Array(16));
-
-      const encrypted = await window.crypto.subtle.encrypt(
+      const myPublicKey = await window.crypto.subtle.importKey(
+        "jwk",
+        user?.publicKey,
         {
           name: "RSA-OAEP",
-          iv,
+          hash: "SHA-256",
         },
-        publicKey,
+        true,
+        ["encrypt"],
+      );
+
+      const importedPrivateKey = await importPrivateKey(privateKey || "");
+
+      // const iv = window.crypto.getRandomValues(new Uint8Array(16));
+
+      const encryptedByOther = await window.crypto.subtle.encrypt(
+        {
+          name: "RSA-OAEP",
+        },
+        otherPublicKey,
         encode(content || ""),
       );
 
-      try {
-        const decrypted = await window.crypto.subtle.decrypt(
-          { name: "RSA-OAEP", iv },
-          importedPrivateKey,
-          str2ab(ab2str(encrypted)),
-        );
+      const encryptedByMe = await window.crypto.subtle.encrypt(
+        {
+          name: "RSA-OAEP",
+        },
+        myPublicKey,
+        encode(content || ""),
+      );
 
-        console.log(
-          "encrypted",
-          encrypted,
-          ab2str(encrypted),
-          decrypted,
-          decode(decrypted),
-        );
-      } catch (e) {
-        console.log(e);
-      }
+      const decrypted = await window.crypto.subtle.decrypt(
+        { name: "RSA-OAEP" },
+        importedPrivateKey,
+        str2ab(ab2str(encryptedByMe)),
+      );
 
-      const data = await api.post("/send-msg", {
+      console.log("decrypted", ab2str(decrypted));
+
+      await api.post("/send-msg", {
         accessToken: session?.access_token,
         receiverID: currentUser?.authID,
         text: content,
+        // encryptedWith: user?.authID,
         files: filesList,
       });
 
-      console.log("dad", data);
-
-      // window.open(data.data[0].files[0].url, "_blank")?.focus();
-
-      // console.log("enterrrrrrr", "dad", content, data);
+      // await api.post("/send-msg", {
+      //   accessToken: session?.access_token,
+      //   receiverID: currentUser?.authID,
+      //   text: ab2str(encryptedByOther),
+      //   encryptedWith: currentUser?.authID,
+      //   files: filesList,
+      // });
     }
   };
 

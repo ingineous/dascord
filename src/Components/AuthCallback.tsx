@@ -1,16 +1,16 @@
 import { css } from "../../styled-system/css/css";
 import Protected from "./Protected/Protected.tsx";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../config/axios.ts";
 import { useAuth } from "../state/auth.ts";
 import {
-  ab2str,
   exportPrivateCryptoKey,
   exportPublicCryptoKey,
   initializeKeys,
 } from "../utils/encryption.ts";
 import UploadKey from "./Auth/UploadKey.tsx";
 import { useKey } from "../state/key.ts";
+import { useRouter } from "wouter";
 
 function AuthCallback() {
   const container = css({
@@ -30,6 +30,8 @@ function AuthCallback() {
   const [privateKey, _setPrivateKey] = useState("");
   const [run, setRun] = useState(0);
 
+  const router = useRouter();
+
   useEffect(() => {
     const register = async () => {
       if (!user && session && run === 0) {
@@ -47,11 +49,13 @@ function AuthCallback() {
           });
           setUser(authUser);
 
+          window.open("/chat");
+
           const privateKey = await exportPrivateCryptoKey(key);
-          download(privateKey);
-          console.log("provo", privateKey);
+          // download(privateKey);
 
           _setPrivateKey(privateKey);
+          setPrivateKey(privateKey);
         } catch (error) {
           console.error(error);
         }
@@ -98,22 +102,22 @@ function AuthCallback() {
   return (
     <Protected disabledPrivate={true}>
       <div className={container}>
-        {privateKey && (
-          <>
-            <button
-              className={buttonStyles}
-              onClick={() => download(privateKey)}
-            >
-              Download Private Key
-            </button>
+        {/*{privateKey && (*/}
+        {/*  <>*/}
+        {/*    <button*/}
+        {/*      className={buttonStyles}*/}
+        {/*      onClick={() => download(privateKey)}*/}
+        {/*    >*/}
+        {/*      Download Private Key*/}
+        {/*    </button>*/}
 
-            <p>
-              Keep the key safe else you wouldn't be able to access your chats
-            </p>
-          </>
-        )}
+        {/*    <p>*/}
+        {/*      Keep the key safe else you wouldn't be able to access your chats*/}
+        {/*    </p>*/}
+        {/*  </>*/}
+        {/*)}*/}
 
-        {!privateKey && <UploadKey />}
+        {/*{!privateKey && <UploadKey />}*/}
       </div>
     </Protected>
   );

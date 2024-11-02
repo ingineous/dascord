@@ -17,7 +17,7 @@ function Protected({ children, disabledPrivate }: PropsWithChildren) {
   }, [session, loading]);
 
   return session ? (
-    <>{disabledPrivate ? children : privateKey ? children : <UploadKey />}</>
+    <>{disabledPrivate ? children : privateKey ? children : ""}</>
   ) : (
     ""
   );
