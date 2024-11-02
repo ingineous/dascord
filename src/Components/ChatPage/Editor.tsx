@@ -11,6 +11,7 @@ import Link from "@tiptap/extension-link";
 import api from "../../config/axios.ts";
 import readFileAsDataURL from "../../utils/readAsDataUrl.ts";
 import { useAuth } from "../../state/auth.ts";
+import { useChat } from "../../state/chat.ts";
 
 const content = ``;
 
@@ -66,6 +67,8 @@ const Editor = () => {
     },
   });
 
+  const { currentUser } = useChat();
+
   const onEnter = async (event: {
     key: string;
     preventDefault: () => void;
@@ -88,7 +91,7 @@ const Editor = () => {
 
       const data = await api.post("/send-msg", {
         accessToken: session?.access_token,
-        receiverID: "1f1b7262-c648-4a53-9511-38de1c105d76",
+        receiverID: currentUser?.authID,
         text: content,
         files: filesList,
       });

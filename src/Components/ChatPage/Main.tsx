@@ -6,6 +6,8 @@ import Editor from "./Editor.tsx";
 import Message from "./Message.tsx";
 import { Link } from "wouter";
 import routes from "../../config/routes.ts";
+import { useChat } from "../../state/chat.ts";
+import { useEffect } from "react";
 import { useAuth } from "../../state/auth.ts";
 
 function Main() {
@@ -83,14 +85,19 @@ function Main() {
     overflowY: "auto",
   });
 
+  const { currentUser, chats, currentChat } = useChat();
   const { user } = useAuth();
+
+  useEffect(() => {
+    console.log("cureneter", chats[currentChat]);
+  }, [chats, currentChat]);
 
   return (
     <div className={styles}>
       <div className={topbarStyles}>
         <div className={aboutStyles}>
-          <p className={nameStyles}>{user?.name}</p>
-          <p className={descriptionStyles}>{user?.bio}</p>
+          <p className={nameStyles}>{currentUser?.name}</p>
+          <p className={descriptionStyles}>{currentUser?.bio}</p>
         </div>
 
         <div className={iconContainerStyles}>
@@ -109,42 +116,25 @@ function Main() {
 
       <div className={mainStyles}>
         <div className={messagesContainer}>
-          <Message message={"diddy"} />
-          <Message message={"typhlosion"} />
-          <Message message={"drake"} />
-          <Message
-            message={
-              '<p><a target="_blank" rel="noopener noreferrer nofollow" href="http://google.com">google.com</a> </p><p></p>'
-            }
-          />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
+          {chats[currentChat] &&
+            chats[currentChat].messages.map((chat, index) => (
+              <Message
+                key={index}
+                message={chat.text}
+                name={
+                  chat.dude === currentUser?.authID
+                    ? currentUser.name
+                    : (user?.name as string)
+                }
+                avatar={
+                  chat.dude === currentUser?.authID
+                    ? currentUser.avatar
+                    : (user?.avatar as string)
+                }
+                files={chat.files}
+                time={chat.time}
+              />
+            ))}
         </div>
 
         <div className={editorContainer}>

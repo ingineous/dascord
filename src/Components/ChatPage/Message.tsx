@@ -4,8 +4,22 @@ import Highlight from "@tiptap/extension-highlight";
 import Typography from "@tiptap/extension-typography";
 import { css } from "../../../styled-system/css";
 import Link from "@tiptap/extension-link";
+import MessageFilePreview from "./MessageFilePreview.tsx";
+import { formatDistance } from "date-fns";
 
-function Message({ message }: { message?: string }) {
+function Message({
+  message,
+  avatar,
+  name,
+  files,
+  time,
+}: {
+  message: string;
+  avatar: string;
+  name: string;
+  files: string[];
+  time: Date;
+}) {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -17,7 +31,7 @@ function Message({ message }: { message?: string }) {
         linkOnPaste: true,
       }),
     ],
-    content: message ? message : `<p><strong>idk</strong> man</p><p></p>`,
+    content: message,
     editable: false,
   });
 
@@ -36,7 +50,7 @@ function Message({ message }: { message?: string }) {
   });
 
   const profileStyles = css({
-    width: "30px",
+    width: "40px",
     marginRight: "30px",
   });
 
@@ -47,19 +61,45 @@ function Message({ message }: { message?: string }) {
   const nameStyles = css({
     fontWeight: "900",
     marginBottom: "10px",
+    display: "flex",
+    justifyContent: "space-between",
+    width: "100%",
   });
 
   const nameContainer = css({
     position: "relative",
     top: "-7px",
+    width: "100%",
   });
+
+  const filesContainer = css({
+    display: "grid",
+    gridTemplateColumns: "300px 300px",
+    columnGap: "10px",
+  });
+
+  const timeStyles = css({
+    color: "cadetGray",
+    fontWeight: "400",
+  });
+
+  const currentTime = formatDistance(new Date(), time);
 
   return (
     <div className={containerStyles}>
-      <img className={profileStyles} src="/ayase.webp" alt="profile" />
+      <img className={profileStyles} src={avatar} alt="profile" />
       <div className={nameContainer}>
-        <p className={nameStyles}>momo:</p>
+        <p className={nameStyles}>
+          <span>{name}:</span>
+          <span className={timeStyles}>{currentTime} ago</span>
+        </p>
         <EditorContent className={editorStyles + " message"} editor={editor} />
+        <div className={filesContainer}>
+          {files &&
+            files.map((file, index) => (
+              <MessageFilePreview key={index} file={file} />
+            ))}
+        </div>
       </div>
     </div>
   );

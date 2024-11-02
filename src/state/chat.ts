@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { User } from "./auth.ts";
 
-interface Message {
+export interface Message {
   dude: string;
   dudette: string;
   text: string;
@@ -10,7 +10,7 @@ interface Message {
   time: Date;
 }
 
-interface MessageAndUsers extends User {
+export interface MessageAndUsers extends User {
   messages: Message[];
 }
 
@@ -19,6 +19,8 @@ interface ChatProps {
   setChats: (chats: MessageAndUsers[]) => void;
   currentUser: User | null;
   setCurrentUser: (user: User | null) => void;
+  currentChat: number;
+  setCurrentChat: (index: number) => void;
 }
 
 const useChat = create<ChatProps>((set) => ({
@@ -26,6 +28,8 @@ const useChat = create<ChatProps>((set) => ({
   setChats: (chats: MessageAndUsers[]) => set({ chats }),
   currentUser: null,
   setCurrentUser: (user: User | null) => set({ currentUser: user }),
+  currentChat: 0,
+  setCurrentChat: (index: number) => set({ currentChat: index }),
 }));
 
 export { useChat };
